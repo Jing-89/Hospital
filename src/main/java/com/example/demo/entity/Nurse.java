@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +32,7 @@ public class Nurse {
 	private String name;
 	
 	@Column(name = "created_at")
-	private LocalDateTime createAt;
+	private LocalDateTime createAt = LocalDateTime.now();
 
 	public Long getId() {
 		return id;
@@ -72,6 +74,7 @@ public class Nurse {
 	    joinColumns = @JoinColumn(name = "nurse_id"),
 	    inverseJoinColumns = @JoinColumn(name = "station_id")
 	)
+	@JsonManagedReference
 	private Set<Station> stations = new HashSet<>();
 
 	public Set<Station> getStations() {
