@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,7 +26,7 @@ public class Station {
 	private String name;
 	
 	@Column (name = "created_at")
-	private LocalDateTime createdAt;
+	private LocalDateTime createdAt=LocalDateTime.now();
 
 	public Long getId() {
 		return id;
@@ -53,6 +55,7 @@ public class Station {
 //	-----------------------------------------------------
 	
 	@ManyToMany (mappedBy = "stations")
+	@JsonBackReference
 	private Set<Nurse> nurses = new HashSet<>();
 
 	public Set<Nurse> getNurses() {
