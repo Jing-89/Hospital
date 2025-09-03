@@ -11,22 +11,27 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
-@Table (name = "station")
+@Table(name = "station")
 public class Station {
-	
+
 	@Id
-	@GeneratedValue (strategy = GenerationType.IDENTITY )
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column (name = "name")
+
+	@Column(name = "name")
 	private String name;
-	
-	@Column (name = "created_at")
-	private LocalDateTime createdAt=LocalDateTime.now();
+
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
+
+	@Column(name = "updated_at")
+	private LocalDateTime updatedAt;
 
 	public Long getId() {
 		return id;
@@ -51,22 +56,43 @@ public class Station {
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	@PrePersist
+	public void prePersist() {
+		if (this.createdAt == null) {
+			this.createdAt = LocalDateTime.now(); 
+		}
+		if (this.updatedAt == null) {
+			this.updatedAt = LocalDateTime.now(); 
+		}
+	}
+
 	
+	@PreUpdate
+	public void preUpdate() {
+		this.updatedAt = LocalDateTime.now();
+	}
+
 //	-----------------------------------------------------
-	
-	@ManyToMany (mappedBy = "stations")
+
+	@OneToMany(mappedBy = "station")
 	@JsonBackReference
-	private Set<Nurse> nurses = new HashSet<>();
+	private Set<NurseStation> nurseStations = new HashSet<>();
 
-	public Set<Nurse> getNurses() {
-		return nurses;
+	public Set<NurseStation> getNurseStations() {
+		return nurseStations;
 	}
 
-	public void setNurses(Set<Nurse> nurses) {
-		this.nurses = nurses;
+	public void setNurseStations(Set<NurseStation> nurseStations) {
+		this.nurseStations = nurseStations;
 	}
-	
-	
 
-	
 }
